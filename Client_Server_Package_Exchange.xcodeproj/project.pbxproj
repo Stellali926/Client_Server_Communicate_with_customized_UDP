@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		54FFFA1D204F0B3E0051FB8A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 54FFFA1C204F0B3E0051FB8A /* main.c */; };
+		54FFFA25204F0B570051FB8A /* Client.c in Sources */ = {isa = PBXBuildFile; fileRef = 54FFFA24204F0B570051FB8A /* Client.c */; };
+		54FFFA27204F0B690051FB8A /* Server.c in Sources */ = {isa = PBXBuildFile; fileRef = 54FFFA26204F0B690051FB8A /* Server.c */; };
+		54FFFA29204F0B790051FB8A /* Customized_UDP.c in Sources */ = {isa = PBXBuildFile; fileRef = 54FFFA28204F0B790051FB8A /* Customized_UDP.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +26,9 @@
 
 /* Begin PBXFileReference section */
 		54FFFA19204F0B3E0051FB8A /* Client_Server_Package_Exchange */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client_Server_Package_Exchange; sourceTree = BUILT_PRODUCTS_DIR; };
-		54FFFA1C204F0B3E0051FB8A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		54FFFA24204F0B570051FB8A /* Client.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Client.c; sourceTree = "<group>"; };
+		54FFFA26204F0B690051FB8A /* Server.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Server.c; sourceTree = "<group>"; };
+		54FFFA28204F0B790051FB8A /* Customized_UDP.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Customized_UDP.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +61,9 @@
 		54FFFA1B204F0B3E0051FB8A /* Client_Server_Package_Exchange */ = {
 			isa = PBXGroup;
 			children = (
-				54FFFA1C204F0B3E0051FB8A /* main.c */,
+				54FFFA24204F0B570051FB8A /* Client.c */,
+				54FFFA26204F0B690051FB8A /* Server.c */,
+				54FFFA28204F0B790051FB8A /* Customized_UDP.c */,
 			);
 			path = Client_Server_Package_Exchange;
 			sourceTree = "<group>";
@@ -119,7 +125,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54FFFA1D204F0B3E0051FB8A /* main.c in Sources */,
+				54FFFA27204F0B690051FB8A /* Server.c in Sources */,
+				54FFFA25204F0B570051FB8A /* Client.c in Sources */,
+				54FFFA29204F0B790051FB8A /* Customized_UDP.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
