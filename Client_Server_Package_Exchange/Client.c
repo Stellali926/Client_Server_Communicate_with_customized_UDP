@@ -23,6 +23,8 @@
 #include "Customized_UDP.c"
 
 #define CLIENT_ID 0x01
+#define CLIENT_ID_NO1 0x01
+#define CLIENT_ID_NO2 0x02
 
 #define SERVER "127.0.0.1"
 #define BUFLEN 10000  //Max length of buffer
@@ -121,6 +123,68 @@ int send_for_ack(int sock, struct sockaddr_in *server_addr, packet *pac, int tim
 void printFormat() {
     printf("==========================================================================\n");
 }
+
+
+void sned_partial_successful_requests(int sock, struct sockaddr_in *server_addr) {
+    if (!server_addr) {
+        die("Cannot find server address");
+    }
+    
+    printFormat();
+    
+    //1. send a successful packet
+    printf("\nSend a successful packet with client id %02x and sequence number 1\n", CLIENT_ID_NO2);
+    char *p = (char *)calloc(PAYLOAD_SIZE, sizeof(char));
+    
+    data_packet data_pac;
+    packet packet;
+    
+    init_data_pac(&data_pac, START_ID, CLIENT_ID_NO2, DATA_PAC, 1, strlen(p), p, END_ID);
+    init_pac(&packet, DATA_PAC, &data_pac);
+    free(p);
+    send_for_ack(sock, server_addr, &packet, 3, 3);
+    
+    //2. error packet with missing sequence number
+    printf("\nError with error code %04x\nThe sended packet with client id %02x and sequence number 9 is not in right sequence, the correct sequence is 2.\n", OUT_OF_SEQUENCE, CLIENT_ID_NO2);
+    p = (char *)calloc(PAYLOAD_SIZE, sizeof(char));
+    
+    
+    init_data_pac(&data_pac, START_ID, CLIENT_ID_NO2, DATA_PAC, 9, strlen(p), p, END_ID);
+    init_pac(&packet, DATA_PAC, &data_pac);
+    free(p);
+    send_for_ack(sock, server_addr, &packet, 3, 3);
+    
+    //3. error packet with length mismatch
+    printf("\nError with error code %4x\nThe sended packet with client id %02x and sequence number 2 has mismatched length\n", LENGTH_MISMATCH, CLIENT_ID_NO2);
+    
+    p = (char *)calloc(PAYLOAD_SIZE, sizeof(char));
+    
+    init_data_pac(&data_pac, START_ID, CLIENT_ID_NO2, DATA_PAC, 2, strlen(p) - 2, p, END_ID);
+    init_pac(&packet, DATA_PAC, &data_pac);
+    free(p);
+    send_for_ack(sock, server_addr, &packet, 3, 3);
+    
+    //4. error packet with wrong end id
+    printf("\nError with error code %04x\nThe sended packet with cliend id %02x and sequence number 3 has wrong end id.\n", END_OF_PACKET_MISSING, CLIENT_ID_NO2);
+    p = (char *)calloc(PAYLOAD_SIZE, sizeof(char));
+    
+    init_data_pac(&data_pac, START_ID, CLIENT_ID_NO2, DATA_PAC, 3, strlen(p), p, 0xfff1);
+    init_pac(&packet, DATA_PAC, &data_pac);
+    free(p);
+    send_for_ack(sock, server_addr, &packet, 3, 3);
+    
+    //5. error packet with duplicate sequence
+    printf("\nError with error code %04x\nThe sended packet with client id %02x and sequence number 2, the sequence number is duplicated.\n", DUPLICATE_PACKET, CLIENT_ID_NO2);
+    p = (char *)calloc(PAYLOAD_SIZE, sizeof(char));
+    
+    init_data_pac(&data_pac, START_ID, CLIENT_ID_NO2, DATA_PAC, 2, strlen(p), p, END_ID);
+    init_pac(&packet, DATA_PAC, &data_pac);
+    free(p);
+    send_for_ack(sock, server_addr, &packet, 3, 3);
+    
+    printFormat();
+}
+
 
 // request the subscriber which is no paid
 void send_not_paid(int sock, struct sockaddr_in *server_addr) {
@@ -234,6 +298,10 @@ void run_client() {
     server_addr.sin_port = htons(PORT);
     
     printFormat();
+    
+    //send partial successful request
+    sned_partial_successful_requests(sock, &server_addr);
+    
     //send not paid message
     send_not_paid(sock, &server_addr);
     
